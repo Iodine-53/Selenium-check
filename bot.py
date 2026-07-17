@@ -11,7 +11,7 @@ print("🚀 Initializing cloud-hosted Chrome application...")
 options = webdriver.ChromeOptions()
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
-# Notice we did NOT pass "--headless" -> We want to watch it work!
+options.add_argument("--disable-gpu")
 
 driver = webdriver.Chrome(options=options)
 
@@ -33,7 +33,7 @@ try:
     search_box.send_keys(Keys.RETURN)
     
     print("✅ >>> Render complete! Keeping browser alive on your VNC window...")
-    time.sleep(15)  # 15 seconds to switch tabs on your phone and watch it scroll
+    time.sleep(15)
 
 except Exception as e:
     print(f"❌ >>> Session aborted due to configuration error: {e}")
@@ -41,3 +41,4 @@ except Exception as e:
 finally:
     driver.quit()
     print("🔒 >>> Cloud automation cycle closed successfully.")
+    
