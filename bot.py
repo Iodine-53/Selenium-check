@@ -13,7 +13,7 @@ options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--lang=en-US") # Force browser internal language to English
 
-os.environ["DISPLAY"] = ":1"
+os.environ["DISPLAY"] = ":0"
 
 driver = webdriver.Chrome(options=options)
 
@@ -48,7 +48,7 @@ try:
     search_box.send_keys(Keys.RETURN)
     
     print("✅ >>> Render complete! Keeping browser alive...")
-    time.sleep(400)
+    time.sleep(600)
 
 except Exception as e:
     print(f"❌ >>> Session aborted due to configuration error: {e}")
