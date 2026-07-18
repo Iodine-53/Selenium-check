@@ -1,43 +1,50 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import time
-import os
 
-# Route the visual interface directly into our cloud monitor setup
-os.environ["DISPLAY"] = ":1"
-
-print("🚀 Initializing cloud-hosted Chrome application...")
-options = webdriver.ChromeOptions()
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-dev-shm-usage")
-options.add_argument("--disable-gpu")
+# ... (your existing chrome options setup above) ...
 
 driver = webdriver.Chrome(options=options)
 
 try:
-    driver.maximize_window()
+    # 1. Force the browser layout to expand completely
+    driver.set_window_size(1280, 800)
     
     print("📡 >>> Connecting to network interface...")
     driver.get("https://www.google.com")
-    time.sleep(2)
     
+    # 2. Check for and bypass a potential Cookie Consent Banner
+    try:
+        # Looks for the "Accept all" button if it exists
+        cookie_btn = WebDriverWait(driver, 3).until(
+            EC.element_to_be_clickable((By.XPATH, '//button[contains(., "Accept all") or contains(., "I agree")]'))
+        )
+        cookie_btn.click()
+        print("🍪 >>> Handled cookie consent overlay.")
+    except Exception:
+        # If no banner popped up, just keep going smoothly
+        pass
+
     print("🔍 >>> Target locked. Finding text input layouts...")
-    search_box = driver.find_element(By.NAME, "q")
+    
+    # 3. Securely wait for the real, interactable search box to appear
+    search_box = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.NAME, "q"))
+    )
     
     print("⌨️ >>> Injecting search sequences dynamically...")
-    search_box.send_keys("How to scale a software development agency from a mobile phone")
-    time.sleep(1.5)
-    
-    print("⏩ >>> Submitting execution payload...")
+    search_box.click() # Explicitly click it first to force focus
+    search_box.send_keys("Your Search Query Here")
     search_box.send_keys(Keys.RETURN)
     
-    print("✅ >>> Render complete! Keeping browser alive on your VNC window...")
+    print("✅ >>> Render complete! Keeping browser alive...")
     time.sleep(400)
 
 except Exception as e:
     print(f"❌ >>> Session aborted due to configuration error: {e}")
-
 finally:
     driver.quit()
     print("🔒 >>> Cloud automation cycle closed successfully.")
