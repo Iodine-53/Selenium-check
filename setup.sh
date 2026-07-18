@@ -5,8 +5,14 @@ echo "🌐 Updating cloud systems and installing GUI desktop elements..."
 sudo apt-get update -y
 sudo apt-get install -y xvfb x11vnc fluxbox websockify novnc wget curl unzip
 
-echo "📦 Installing Google Chrome binaries..."
-sudo apt-get install -y chromium-browser || sudo apt-get install -y google-chrome-stable || true
+echo "📦 Downloading and installing stable Google Chrome binaries..."
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+# We add || true here so set -e doesn't crash the script when dependencies are missing
+sudo dpkg -i google-chrome-stable_current_amd64.deb || true
+sudo apt-get install -f -y
+
+echo "🧹 Cleaning up installation packages..."
+rm google-chrome-stable_current_amd64.deb
 
 echo "🐍 Installing Python automation modules..."
 pip install selenium
