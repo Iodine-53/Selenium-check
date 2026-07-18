@@ -33,7 +33,7 @@ try:
     search_box.send_keys(Keys.RETURN)
     
     print("✅ >>> Render complete! Keeping browser alive on your VNC window...")
-    time.sleep(15)
+    time.sleep(400)
 
 except Exception as e:
     print(f"❌ >>> Session aborted due to configuration error: {e}")
